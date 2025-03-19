@@ -36,23 +36,20 @@ int main()
 
 char *remakeLine(const char *str)
 {
-    int i, j;
+    int i;
     int len = getLength(str);
+    const char *ptr = str;
 
-    int newLen = 0;
-    for (i = 0; i < len; i++)
+    while (*ptr != '\0')
     {
-        if (str[i] == ' ' || str[i] == '\t')
+        if (*ptr == ' ' || *ptr == '\t')
         {
-            newLen += 2; // "\\s" or "\\t" takes 2 chars
+            len += 1;
         }
-        else
-        {
-            newLen += 1;
-        }
+        ptr++;
     }
 
-    char *newString = malloc((newLen + 1) * sizeof(char));
+    char *newString = malloc((len + 1) * sizeof(char));
 
     if (newString == NULL)
     {
@@ -60,38 +57,44 @@ char *remakeLine(const char *str)
         abort();
     }
 
-    for (i = 0, j = 0; i < len; i++)
+    ptr = str;
+    char *pNew = newString;
+
+    while (*ptr != '\0')
     {
-        switch (str[i])
+        switch (*ptr)
         {
         case ' ':
-            newString[j++] = '\\';
-            newString[j++] = 's';
+            // \s - like 's'pace
+            *pNew++ = '\\';
+            *pNew++ = 's';
             break;
         case '\t':
-            newString[j++] = '\\';
-            newString[j++] = 't';
+            *pNew++ = '\\';
+            *pNew++ = 't';
             break;
         default:
-            newString[j++] = str[i];
+            *pNew++ = *ptr;
             break;
         }
+        ptr++;
     }
 
-    newString[j] = '\0';
+    *pNew = '\0';
     return newString;
 }
 
 char *getLine(char *str, int lim)
 {
-    int i, c;
+    int c;
+    char *ptr = str;
 
-    for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; i++)
+    while ((ptr - str) < lim - 1 && (c = getchar()) != EOF && c != '\n')
     {
-        str[i] = c;
+        *ptr++ = c;
     }
 
-    str[i] = '\0';
+    *ptr = '\0';
 
     return str;
 }
@@ -100,9 +103,10 @@ int getLength(const char *str)
 {
     int i = 0;
 
-    while (str[i] != '\0')
+    while (*str != '\0')
     {
         i++;
+        str++;
     }
     return i;
 }
