@@ -3,15 +3,18 @@
 
 #define MAX 100
 
-int getIndex(const char *str, int c);
+void reverse(char *str);
 int strLen(const char *str);
+void toUpperCase(char *str);
+void toLowerCase(char *str);
+int getIndex(const char *str, int c);
 void strCpy(char *dest, const char *src);
 void strCat(char *dest, const char *src);
 void strModify(char *dest, const char *src);
-void reverse(char *str);
-void toUpperCase(char *str);
-void toLowerCase(char *str);
 int strLenCmp(const char *str1, const char *str2);
+void strModify1(char *dest, const char *src, size_t dest_size);
+
+// MAIN
 
 int main(int argc, char **argv)
 {
@@ -21,7 +24,7 @@ int main(int argc, char **argv)
     // int buff[10];
     // for (i = 0; i < 10; i++)
     // {
-    //     buff[i] = 0 + i;
+    //     buff[i] = i;
     // }
     // int *pY;
 
@@ -34,9 +37,27 @@ int main(int argc, char **argv)
 
     char *newStr = malloc((MAX + 1) * sizeof(char));
 
+    if (newStr == NULL)
+    {
+        puts("no memory");
+        abort();
+    }
+
     char *copyStr = malloc((MAX + 1) * sizeof(char));
 
+    if (copyStr == NULL)
+    {
+        puts("no memory");
+        abort();
+    }
+
     char *yo = malloc((MAX + 1) * sizeof(char));
+
+    if (yo == NULL)
+    {
+        puts("no memory");
+        abort();
+    }
 
     char *nP = newStr;
 
@@ -49,7 +70,7 @@ int main(int argc, char **argv)
 
     char *string = " is a string";
 
-    char *new = " hello-world-test ";
+    char *new = "hello-world-test";
 
     int index = getIndex(string, 't');
 
@@ -60,9 +81,9 @@ int main(int argc, char **argv)
     strModify(yo, new);
 
     printf("Org = %s\n", newStr);
+    printf("Str = this%s, index=%d\n", string, index);
     printf("org = %s\n", copyStr);
-    printf("Oi = %s\n", newStr);
-    printf("Yo = %s\n", yo);
+    printf("Yo0 = %s\n", yo);
 
     reverse(yo);
 
@@ -81,11 +102,28 @@ int main(int argc, char **argv)
     int len1 = strLen(newStr);
     int len2 = strLen(yo);
 
+    const char *example = "ByeWorldLol";
+
+    size_t buffer_size = strLen(example) + 3; // you can change it to check function behavior
+
+    char *buffYo = malloc(buffer_size);
+
+    if (buffYo == NULL)
+    {
+        puts("no memory");
+        abort();
+    }
+
+    strModify1(buffYo, example, buffer_size);
+
+    printf("Yo4 = %s\n", buffYo);
+
     printf("len of newString is %d and yo is %d, then strLenCmp = %d\n", len1, len2, result);
 
     free(newStr);
     free(copyStr);
     free(yo);
+    free(buffYo);
 }
 
 int getIndex(const char *str, int c)
@@ -158,12 +196,56 @@ void strModify(char *dest, const char *src)
     *dest = '\0';
 }
 
+void strModify1(char *dest, const char *src, size_t dest_size)
+{
+    const char *first = src;
+    size_t required_size = 0;
+
+    while (*src)
+    {
+        if ((*src >= 'A' && *src <= 'Z') && src != first)
+            required_size += 2;
+        else
+            required_size++;
+
+        src++;
+    }
+
+    if (required_size + 1 > dest_size)
+    {
+        printf("Error: Destination buffer is too small!\n");
+        abort();
+    }
+
+    src = first;
+    while (*src)
+    {
+        if ((*src >= 'A' && *src <= 'Z') && src != first)
+        {
+            *dest++ = '-';
+            *dest++ = *src + 32;
+            src++;
+        }
+        else if (src == first)
+        {
+            *dest++ = (*src >= 'A' && *src <= 'Z') ? (*src + 32) : *src;
+            src++;
+        }
+        else
+        {
+            *dest++ = *src;
+            src++;
+        }
+    }
+    *dest = '\0';
+}
+
 void reverse(char *str)
 {
     char *left = str;
     char *right = str;
 
-    while (*right)
+    while (*right != '\0')
     {
         right++;
     }
@@ -171,9 +253,9 @@ void reverse(char *str)
 
     while (right > left)
     {
-        char temp = *left;
-        *left = *right;
-        *right = temp;
+        *left = *left ^ *right;
+        *right = *left ^ *right;
+        *left = *left ^ *right;
 
         left++;
         right--;
@@ -221,9 +303,9 @@ int strLenCmp(const char *str1, const char *str2)
     }
 
     if (i > j)
-        return -1;
-    if (i < j)
         return 1;
+    if (i < j)
+        return -1;
 
     return 0;
 }
