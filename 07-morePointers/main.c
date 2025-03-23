@@ -10,6 +10,8 @@ void strCat(char *dest, const char *src);
 void strModify(char *dest, const char *src);
 void reverse(char *str);
 void toUpperCase(char *str);
+void toLowerCase(char *str);
+int strLenCmp(const char *str1, const char *str2);
 
 int main(int argc, char **argv)
 {
@@ -47,10 +49,9 @@ int main(int argc, char **argv)
 
     char *string = " is a string";
 
-    char *new = "gmail-t";
+    char *new = " hello-world-test ";
 
     int index = getIndex(string, 't');
-    int len = strLen(string);
 
     strCpy(copyStr, newStr);
 
@@ -70,6 +71,17 @@ int main(int argc, char **argv)
     toUpperCase(yo);
 
     printf("Yo2 = %s\n", yo);
+
+    toLowerCase(yo);
+
+    printf("Yo3 = %s\n", yo);
+
+    int result = strLenCmp(yo, newStr);
+
+    int len1 = strLen(newStr);
+    int len2 = strLen(yo);
+
+    printf("len of newString is %d and yo is %d, then strLenCmp = %d\n", len1, len2, result);
 
     free(newStr);
     free(copyStr);
@@ -175,4 +187,43 @@ void toUpperCase(char *str)
         *str = (*str >= 'a' && *str <= 'z') ? (*str - 32) : *str;
         str++;
     }
+}
+
+void toLowerCase(char *str)
+{
+    while (*str != '\0')
+    {
+        *str = (*str >= 'A' && *str <= 'Z') ? (*str + 32) : *str;
+        str++;
+    }
+}
+
+int strLenCmp(const char *str1, const char *str2)
+{
+
+    int i, j;
+
+    i = j = 0;
+
+    while (*str1 != '\0' || *str2 != '\0')
+    {
+        if (*str1)
+        {
+            str1++;
+            i++;
+        }
+
+        if (*str2)
+        {
+            str2++;
+            j++;
+        }
+    }
+
+    if (i > j)
+        return -1;
+    if (i < j)
+        return 1;
+
+    return 0;
 }
