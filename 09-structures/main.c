@@ -173,7 +173,7 @@ void printBook(const struct Book *book)
 
 void removeNewStr(char *str)
 {
-    if (str == NULL) return;
+    if (str == "" || str == NULL) return;
 
     while (*str != '\0')
     {
