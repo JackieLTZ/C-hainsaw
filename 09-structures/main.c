@@ -117,6 +117,7 @@ int main()
             char choice;
             printf("Do you want to add another book (y/n)? ");
             scanf(" %c", &choice);
+            getchar();
             if (choice == 'n' || choice == 'N') {
                 break;
             }
