@@ -143,7 +143,7 @@ void inputBook(struct Book *book)
     fgets(book->author, MAX_TITLE_LEN, stdin);
     removeNewStr(book->author);
 
-    char buff[5];
+    char buff[10];
     printf("Please enter the year: ");
 
     if (fgets(buff, sizeof(buff), stdin))
