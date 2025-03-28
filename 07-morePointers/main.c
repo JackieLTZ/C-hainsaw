@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define MAX 100
 
@@ -233,8 +233,7 @@ void strModify1(char *dest, const char *src, size_t dest_size)
         }
         else
         {
-            *dest++ = *src;
-            src++;
+            *dest++ = *src++;
         }
     }
     *dest = '\0';
@@ -253,9 +252,9 @@ void reverse(char *str)
 
     while (right > left)
     {
-        *left = *left ^ *right;
-        *right = *left ^ *right;
-        *left = *left ^ *right;
+        char temp = *left;
+        *left = *right;
+        *right = temp;
 
         left++;
         right--;

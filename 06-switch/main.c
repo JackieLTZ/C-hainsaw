@@ -10,7 +10,7 @@ int main()
 {
     int c;
 
-    char *string = malloc(LENGTH * sizeof(char));
+    char *string = malloc((LENGTH + 1) * sizeof(char));
 
     if (string == NULL)
     {
